@@ -319,3 +319,7 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 
 # Dotfiles management
 alias dotfiles='/usr/bin/git --git-dir=/home/cudrano/.dotfiles/ --work-tree=/home/cudrano    '
+
+# nvidia-htop
+alias nnv="nvidia-htop.py"
+
