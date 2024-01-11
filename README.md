@@ -35,7 +35,7 @@ dotfiles config status.showUntrackedFiles no
 First, make sure this repo is present on the machine: (If this dotfiles management is already used on the machine, you can skip this part)
 
 ```
-git clone --bare <git-repo-url> $HOME/.dotfiles --branch <branch-name>
+git clone --bare <git-repo-url> $HOME/.dotfiles
 function dotfiles {
    /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
 }
