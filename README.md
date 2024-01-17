@@ -12,10 +12,24 @@ Credits for this setup to: https://www.atlassian.com/git/tutorials/dotfiles
 ### Clone a setup on a new machine
 
 ```
-git clone --bare <git-repo-url> $HOME/.dotfiles --branch <branch-name>
+git clone --recurse-submodules <git-repo-url> $HOME/dotfiles_tmp --branch zsh_macos
+cp -r dotfiles_tmp/.git .dotfiles
+cp dotfiles_tmp/.gitmodules .
+rm -rf dotfiles_tmp
 function dotfiles {
    /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
 }
+
+# zprezto setup
+#restore my runcom files for zprezto
+setopt EXTENDED_GLOB
+for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto_myruncoms/^README.md(.N); do
+  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+done
+#restore git aliases
+mv .zprezto/modules/git .zprezto/modules/_git
+cp -r .zprezto_mymodules/git .zprezto/modules/git
+
 # attempt to set up dotfiles
 dotfiles checkout
 if [ $? = 0 ]; then # if is overwriting some files
@@ -28,6 +42,8 @@ else
   dotfiles checkout
 fi;
 dotfiles config status.showUntrackedFiles no
+
+
 ```
 
 ### Add a new setup
@@ -39,7 +55,6 @@ git clone --bare <git-repo-url> $HOME/.dotfiles
 function dotfiles {
    /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
 }
-dotfiles config status.showUntrackedFiles no
 ```
 
 Create a branch for the new setup:

@@ -1,0 +1,3 @@
+# Dotfiles management
+alias dotfiles='/usr/bin/git --git-dir=/Users/archnnj/.dotfiles/ --work-tree=/Users/archnnj'
+
