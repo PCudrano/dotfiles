@@ -1,21 +1,5 @@
-# Load GNU aliases for mac
-# Use homebrew's coreutils if possible or the standard command otherwise
-if [ -d "$HOME/.homebrew/Cellar/coreutils" ]; then
-    LATEST_COREUTILS_DIR=$(ls -td -- $HOME/.homebrew/Cellar/coreutils/*/ | head -n 1)
-    if [[ ! -z ${LATEST_COREUTILS_DIR+x} ]] && [[ -d "$LATEST_COREUTILS_DIR" ]]; then
-        export PATH=$PATH:$LATEST_COREUTILS_DIR/bin
-        alias ls='gls --color=auto'
-        alias dircolors=gdircolors
-    fi
-else
-    if [[ `uname -s` == 'Darwin' ]]; then
-        alias ls='ls -G'
-    else
-        alias ls='ls --color=auto'
-    fi
-fi
-
-# Set other ls aliases
+# Set ls aliases
+alias ls='ls --color=auto'
 alias ll='ls -l'
 alias lla='ls -alF'
 alias lh='ls -sh'
@@ -49,33 +33,33 @@ alias gff='git merge --ff-only'
 # where SSH freezes while trying to do public key authentication because
 # DIRO has the NFS/Kerberos Setup From Hell.
 # From http://unix.stackexchange.com/q/15138
-alias sshpw='ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no'
+# alias sshpw='ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no'
 
 # Force 256 colors tmux
-alias tmux="TERM=xterm-256color tmux"
+# alias tmux="TERM=xterm-256color tmux"
 #alias tmux="tmux -2"  # Force tmux to use 256 colors
 # . $HOME/.tmux/set_tmux_config.sh
 
 # Autocomplete ssh names in bash (defined in .ssh/config)
-_complete_ssh_hosts () {
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    comp_ssh_hosts=`cat ~/.ssh/known_hosts | \
-                    cut -f 1 -d ' ' | \
-                    sed -e s/,.*//g | \
-                    grep -v ^# | \
-                    uniq | \
-                    grep -v "\[" ;
-            cat ~/.ssh/config | \
-                    grep "^Host " | \
-                    awk '{print $2}'
-            `
-    COMPREPLY=( $(compgen -W "${comp_ssh_hosts}" -- $cur))
-    return 0
-}
-complete -F _complete_ssh_hosts ssh
+# _complete_ssh_hosts () {
+#     COMPREPLY=()
+#     cur="${COMP_WORDS[COMP_CWORD]}"
+#     comp_ssh_hosts=`cat ~/.ssh/known_hosts | \
+#                     cut -f 1 -d ' ' | \
+#                     sed -e s/,.*//g | \
+#                     grep -v ^# | \
+#                     uniq | \
+#                     grep -v "\[" ;
+#             cat ~/.ssh/config | \
+#                     grep "^Host " | \
+#                     awk '{print $2}'
+#             `
+#     COMPREPLY=( $(compgen -W "${comp_ssh_hosts}" -- $cur))
+#     return 0
+# }
+# complete -F _complete_ssh_hosts ssh
 
-alias squeue='squeue -o "%.6i %.1t %.6q %.7m %.12b %.3C %.3D %.18k %.11L %R"'
+# alias squeue='squeue -o "%.6i %.1t %.6q %.7m %.12b %.3C %.3D %.18k %.11L %R"'
 
 # Quick and dirty installation of packages with pip from GitHub.
 ghpip() {
@@ -100,21 +84,21 @@ disk_usage() {
 }
 
 # who is using gpus
-gpu_who() {
-    for i in `nvidia-smi -q -d PIDS | grep ID | cut -d ":" -f2`; do ps -u -p "$i"; done
-}
+# gpu_who() {
+#     for i in `nvidia-smi -q -d PIDS | grep ID | cut -d ":" -f2`; do ps -u -p "$i"; done
+# }
 
 # rsync options
-alias rsyncopt="rsync -a -X --partial -h --progress --bwlimit=20000 --copy-links "
-alias rsyncopt_nolimit="rsync -a -X --partial -h --progress --copy-links "
-cpdataset() {
-    if [ "$#" -ne 4 ]; then
-        echo "Usage: cpdataset <source_files> <dest_user> <dest_server> <dest_root_dir>"
-    else
-        tar czf - $1 | ssh $2@$3 "cd $4 && tar xvzf -"
-    fi
-    }
-export -f cpdataset
+# alias rsyncopt="rsync -a -X --partial -h --progress --bwlimit=20000 --copy-links "
+# alias rsyncopt_nolimit="rsync -a -X --partial -h --progress --copy-links "
+# cpdataset() {
+#     if [ "$#" -ne 4 ]; then
+#         echo "Usage: cpdataset <source_files> <dest_user> <dest_server> <dest_root_dir>"
+#     else
+#         tar czf - $1 | ssh $2@$3 "cd $4 && tar xvzf -"
+#     fi
+#     }
+# export -f cpdataset
 
 CVD() { echo $CUDA_VISIBLE_DEVICES; }
 CVD_CLR(){ export CUDA_VISIBLE_DEVICES=''; }
@@ -318,4 +302,4 @@ alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
 
 # Dotfiles management
-alias dotfiles='/usr/bin/git --git-dir=/home/cudrano/.dotfiles/ --work-tree=/home/cudrano    '
+alias dotfiles='/usr/bin/git --git-dir=/home/paolo.cudrano/.dotfiles/ --work-tree=/home/paolo.cudrano'

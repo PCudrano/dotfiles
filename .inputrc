@@ -83,6 +83,8 @@ set enable-bracketed-paste on
 ## arrow down
 "\e[B":history-search-forward
 
+# Autocomplete
 TAB: menu-complete
 "\e[Z": menu-complete-backward
-
+set show-all-if-ambiguous on
+set menu-complete-display-prefix on
