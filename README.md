@@ -9,6 +9,17 @@ Credits for this setup to: https://www.atlassian.com/git/tutorials/dotfiles
 
 ## Quick guide
 
+### Setup on a new machine (without tracking)
+```
+git clone --recursive <git-repo-url> ~/temp
+cd ~/temp
+find . -mindepth 1 -maxdepth 1 -exec mv -t.. -- {} +  # Move every file to home folder
+cd ; rm -r ~/temp  # Remove the temporary directory
+```
+
+*(Optional)*
+Install tmux plugins: open tmux and use `<prefix> + I` to install the plugins.
+
 ### Clone a setup on a new machine
 
 ```
