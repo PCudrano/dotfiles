@@ -138,3 +138,13 @@ if [ -f ~/.git-prompt.sh ]; then
 fi
 
 export EDITOR=vim
+
+# Huggingface
+export HF_HOME="${SCRATCH}/.cache/huggingface"
+
+# VS Code Python Debugger
+export DEBUGPY_PROCESS_SPAWN_TIMEOUT=500
+
+# Avoid escape of $ in tab completion
+shopt -s direxpand
+
