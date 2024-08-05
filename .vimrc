@@ -32,7 +32,7 @@ set autoindent
 set wrap
 
 " display line numbers:
-set number
+set nonumber
 
 set formatoptions-=t
 set textwidth=99
