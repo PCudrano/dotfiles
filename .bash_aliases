@@ -235,13 +235,13 @@ alias glgga='git log --graph --decorate --all'
 alias glgm='git log --graph --max-count=10'
 alias glgp='git log --stat -p'
 alias glo='git log --oneline --decorate'
-alias glod='git log --graph --pretty=''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'''
-alias glods='git log --graph --pretty=''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'' --date=short'
+alias glod='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset"'
+alias glods='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset" --date=short'
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
-alias glol='git log --graph --pretty=''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'''
-alias glola='git log --graph --pretty=''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'' --all'
-alias glols='git log --graph --pretty=''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'' --stat'
+alias glol='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset"'
+alias glola='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all'
+alias glols='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --stat'
 alias glp=_git_log_prettily
 alias glum='git pull upstream $(git_main_branch)'
 alias gm='git merge'
@@ -322,4 +322,6 @@ alias dotfiles='/usr/bin/git --git-dir=/home/cudrano/.dotfiles/ --work-tree=/hom
 
 # nvidia-htop
 alias nnv="nvidia-htop.py"
-
+alias nnvc="nvidia-htop.py -c"
+alias wnnv="watch nvidia-htop.py"
+alias wnnvc="watch -c nvidia-htop.py -c"
