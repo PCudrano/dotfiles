@@ -158,12 +158,13 @@ else
     BASH_COLOR=${GREEN}
 fi
 
-
-function ps1_python_env_info(){
+function ps1_python_env_info {
     env=""
-    [[ -n "${VIRTUAL_ENV}" ]] && env+="${BLUE2}(venv:${VIRTUAL_ENV##*/})"
-    [[ -n "${CONDA_DEFAULT_ENV}" ]] && env+="${GREEN2}(conda:${CONDA_DEFAULT_ENV##*/})"
-    echo $env
+    [[ -n "${VIRTUAL_ENV}" ]] && env+="\001${BLUE2}\002(venv:${VIRTUAL_ENV##*/})"
+    [[ -n "${CONDA_DEFAULT_ENV}" ]] && env+="\001${GREEN2}\002(conda:${CONDA_DEFAULT_ENV##*/})"
+    # Note: \001 and \002 are octal escapes instead of \[ and \], since these do not work inside
+    # functions (https://wiki.archlinux.org/title/Bash/Prompt_customization)
+    echo -e $env
 }
 
 # Hide conda current env in the prompt
@@ -174,8 +175,9 @@ fi
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 # format bash
 # RESET=${WHITE}
-#PS1='\[${BASH_COLOR}\]┌─────── \u@\h\[${BLUE}\] [\w]\[${YELLOW}\]$(__git_ps1 " (%s)")\n\[${BASH_COLOR}\]└─ $(ps1_python_env_info)\[${BASH_COLOR}\] λ \[${RESET}\]'
 PS1='$([ $? == 0 ] && echo "\[${BASH_COLOR}\]┌─" || echo "\[${RED}\]X " )\[${BASH_COLOR}\]─────── \u@\h\[${BLUE}\] [\w]\[${YELLOW}\]$(__git_ps1 " (%s)")\n\[${BASH_COLOR}\]└─ $(ps1_python_env_info)\[${BASH_COLOR}\] λ \[${RESET}\]'
+#PS1='\[${BASH_COLOR}\]┌─────── \u@\h\[${BLUE}\] [\w]\[${YELLOW}\]$(__git_ps1 " (%s)")\n\[${BASH_COLOR}\]└─ $(ps1_python_env_info)\[${BASH_COLOR}\] λ \[${RESET}\]'
+#PS1='\[${BASH_COLOR}\]┌─────── \u@\h\[${BLUE}\] [\w]\[${YELLOW}\]$(__git_ps1 " (%s)")\n\[${BASH_COLOR}\]└─ \[${BASH_COLOR}\] λ \[${RESET}\]'
 
 # If this is an gnome-terminal set the title to user@host:dir
 # For konsole, just modify the preferences to print %w
