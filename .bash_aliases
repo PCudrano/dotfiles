@@ -45,14 +45,10 @@ alias gff='git merge --ff-only'
 # hub command for better GitHub integration.
 # [ $(which hub 2>/dev/null) ] && alias git=hub
 
-# Force password authentication with SSH. Used to get around the situation
-# where SSH freezes while trying to do public key authentication because
-# DIRO has the NFS/Kerberos Setup From Hell.
-# From http://unix.stackexchange.com/q/15138
-alias sshpw='ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no'
+# alias sshpw='ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no'
 
 # Force 256 colors tmux
-alias tmux="TERM=xterm-256color tmux"
+# alias tmux="TERM=xterm-256color tmux"
 #alias tmux="tmux -2"  # Force tmux to use 256 colors
 # . $HOME/.tmux/set_tmux_config.sh
 
@@ -325,3 +321,4 @@ alias nnv="nvidia-htop.py"
 alias nnvc="nvidia-htop.py -c"
 alias wnnv="watch nvidia-htop.py"
 alias wnnvc="watch -c nvidia-htop.py -c"
+

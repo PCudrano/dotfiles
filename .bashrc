@@ -2,16 +2,11 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=999999
-HISTFILESIZE=50000
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
 # If there are multiple matches for completion, Tab should cycle through them
 bind 'TAB:menu-complete'
@@ -102,6 +97,7 @@ if [ -f ~/.git-prompt.sh ]; then
     source ~/.git-prompt.sh
 fi
 
+################################## My prompt ###################################
 # SOLARIZED
 # if [[ $COLORTERM = gnome-* && $TERM = xterm ]]  && infocmp gnome-256color >/dev/null 2>&1; then TERM=gnome-256color; fi
 # See http://unix.stackexchange.com/questions/105926/how-to-include-commands-in-bashs-ps1-without-breaking-line-length-calculation
@@ -128,8 +124,10 @@ if tput setaf 1 &> /dev/null; then
       MAGENTA=$(tput setaf 125)
       VIOLET=$(tput setaf 61)
       BLUE=$(tput setaf 33)
+      BLUE2=$(tput setaf 75)
       CYAN=$(tput setaf 37)
       GREEN=$(tput setaf 64)
+      GREEN2=$(tput setaf 76)
     else
       BASE03=$(tput setaf 8)
       BASE02=$(tput setaf 0)
@@ -145,37 +143,49 @@ if tput setaf 1 &> /dev/null; then
       MAGENTA=$(tput setaf 5)
       VIOLET=$(tput setaf 13)
       BLUE=$(tput setaf 4)
+      BLUE2=$(tput setaf 4)
       CYAN=$(tput setaf 6)
       GREEN=$(tput setaf 2)
+      GREEN2=$(tput setaf 2)
     fi
     BOLD=$(tput bold)
     RESET=$(tput sgr0)
-# else
+else
     # Linux console colors. I don't have the energy
     # to figure out the Solarized values
     # foreground colors
-    # BLACK=\e[0;30m        # Black
-    # RED=\e[0;31m          # Red
-    # GREEN=\e[0;32m        # Green
-    # YELLOW=\e[0;33m       # Yellow
-    # BLUE=\e[0;34m         # Blue
-    # PURPLE=\e[0;35m       # Purple
-    # CYAN=\e[0;36m         # Cyan
-    # WHITE=\e[0;37m        # White
-    # MAGENTA="\033[1;31m"
-    # ORANGE="\033[1;33m"
-    # GREEN="\033[1;32m"
-    # PURPLE="\033[1;35m"
-    # WHITE="\033[1;37m"
-    # BOLD=""
-    # RESET="\033[m"
+    BLACK="\e[0;30m"        # Black
+    RED="\e[0;31m"          # Red
+    GREEN="\e[0;32m"        # Green
+    YELLOW="\e[0;33m"       # Yellow
+    BLUE="\e[0;34m"         # Blue
+    BLUE2="\e[0;34m"         # Blue
+    PURPLE="\e[0;35m"       # Purple
+    CYAN="\e[0;36m"         # Cyan
+    WHITE="\e[0;37m"        # White
+    MAGENTA="\033[1;31m"
+    ORANGE="\033[1;33m"
+    GREEN="\033[1;32m"
+    GREEN2="\033[1;32m"
+    PURPLE="\033[1;35m"
+    WHITE="\033[1;37m"
+    BOLD=""
+    RESET="\033[m"
 fi
-
 if [ -f /.dockerenv ]; then
     BASH_COLOR=${ORANGE}
 else
     BASH_COLOR=${GREEN}
 fi
+
+function ps1_python_env_info {
+    env=""
+    [[ -n "${VIRTUAL_ENV}" ]] && env+="\001${BLUE2}\002(venv:${VIRTUAL_ENV##*/})"
+    [[ -n "${CONDA_DEFAULT_ENV}" ]] && env+="\001${GREEN2}\002(conda:${CONDA_DEFAULT_ENV##*/})"
+    # Note: \001 and \002 are octal escapes instead of \[ and \], since these do not work inside
+    # functions (https://wiki.archlinux.org/title/Bash/Prompt_customization)
+    echo -e $env
+}
 
 # Hide conda current env in the prompt
 if hash conda 2>/dev/null; then
@@ -183,9 +193,8 @@ if hash conda 2>/dev/null; then
 fi
 
 # format bash
-# RESET=${WHITE}
-PS1='\[${BASH_COLOR}\]┌─────── \u@\h\[${BLUE}\] [\w]\[${YELLOW}\]$(__git_ps1 " (%s)")\n\[${BASH_COLOR}\]└─ ${CONDA_DEFAULT_ENV} λ \[${RESET}\]'
-# VIRTUAL_ENV_DISABLE_PROMPT=1 source ~/Enthought/Canopy_64bit/User/bin/activate
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+PS1='$([ $? == 0 ] && echo "\[${BASH_COLOR}\]┌─" || echo "\[${RED}\]X " )\[${BASH_COLOR}\]─────── \u@\h\[${BLUE}\] [\w]\[${YELLOW}\]$(__git_ps1 " (%s)")\n\[${BASH_COLOR}\]└─ $(ps1_python_env_info)\[${BASH_COLOR}\] λ \[${RESET}\]'
 
 # If this is an gnome-terminal set the title to user@host:dir
 # For konsole, just modify the preferences to print %w
@@ -197,9 +206,6 @@ xterm*|rxvt*)
 *)
     ;;
 esac
-
-# Uncomment to use my own conda env
-# export PATH=$HOME/.miniconda/bin:$PATH
 
 # SSH Agent (save passphrase after first use)
 if [ $(ps aux | grep -v grep | grep ssh-agent | wc -l) -eq 0 ]; then
@@ -220,4 +226,17 @@ export PATH="$HOME/miniconda3/bin:$PATH"
 if [[ -f ~/.magrathea_fcn ]]; then
     source ~/.magrathea_fcn
 fi
+
+################################################################################
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+# Huggingface
+export HF_HOME="/multiverse/storage/cudrano/.cache/huggingface"
+
+# VS Code Python Debugger
+export DEBUGPY_PROCESS_SPAWN_TIMEOUT=500
 
