@@ -87,15 +87,15 @@ export TMPDIR='/tmp'
 export EDITOR=vim
 
 # Ctrl-D
-IGNOREEOF=10   # Shell only exists after the 10th consecutive Ctrl-d
+#IGNOREEOF=10   # Shell only exists after the 10th consecutive Ctrl-d
 
 # autojump
-[[ -s /u/visin/.autojump/etc/profile.d/autojump.sh ]] && source /u/visin/.autojump/etc/profile.d/autojump.sh
+#[[ -s /u/visin/.autojump/etc/profile.d/autojump.sh ]] && source /u/visin/.autojump/etc/profile.d/autojump.sh
 
 # cool bash and git bash extension
-if [ -f ~/.git-prompt.sh ]; then
-    source ~/.git-prompt.sh
-fi
+#if [ -f ~/.git-prompt.sh ]; then
+#    source ~/.git-prompt.sh
+#fi
 
 ################################## My prompt ###################################
 # SOLARIZED
@@ -199,13 +199,13 @@ PS1='$([ $? == 0 ] && echo "\[${BASH_COLOR}\]┌─" || echo "\[${RED}\]X " )\[$
 # If this is an gnome-terminal set the title to user@host:dir
 # For konsole, just modify the preferences to print %w
 # Set an xterm title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+#case "$TERM" in
+#xterm*|rxvt*)
+#    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+#    ;;
+#*)
+#    ;;
+#esac
 
 # SSH Agent (save passphrase after first use)
 if [ $(ps aux | grep -v grep | grep ssh-agent | wc -l) -eq 0 ]; then
@@ -228,11 +228,6 @@ if [[ -f ~/.magrathea_fcn ]]; then
 fi
 
 ################################################################################
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
 
 # Huggingface
 export HF_HOME="/multiverse/storage/cudrano/.cache/huggingface"
