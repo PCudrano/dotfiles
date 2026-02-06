@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Function to display help
+show_help() {
+    echo "Usage: docker-stats.sh [-u USER | --me] [-n SEC] [-h]"
+    echo
+    echo "Options:"
+    echo "  -u USER   Specify the user whose containers to monitor."
+    echo "            If not specified, monitors all containers."
+    echo "  --me      Monitor containers belonging to the current user ($(whoami))."
+    echo "  -n SEC    Refresh every SEC seconds. (Default: 2)"
+    echo "  -h        Show this help message and exit."
+}
+
+# Initialize user variable as empty
+USER=""
+SEC=2
+
+# Parse options
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -u)
+            if [[ -n $2 && $2 != -* ]]; then
+                USER="$2"
+                shift
+            else
+                echo "Option -u requires an argument." >&2
+                show_help
+                exit 1
+            fi
+            ;;
+        --me)
+            USER=$(whoami)
+            ;;
+        -n)
+            if [[ -n $2 && $2 != -* ]]; then
+                SEC=$2
+                shift
+            else
+                echo "Option -n requires an argument." >&2
+                show_help
+                exit 1
+            fi
+            ;;
+        -h)
+            show_help
+            exit 0
+            ;;
+        *)
+            echo "Invalid option: $1" >&2
+            show_help
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+# Check if a user was specified
+if [[ -n "$USER" ]]; then
+    # Filter containers by user
+    #docker stats $(docker ps --format '{{.ID}}' -f "name=$USER")
+    watch -n $SEC 'docker stats --no-stream $(docker ps --format "{{.ID}}" -f "name=$USER")'
+
+else
+    # Monitor all containers
+    docker stats
+fi
+
