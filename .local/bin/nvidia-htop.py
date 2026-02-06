@@ -11,6 +11,8 @@
 #                                    otherwise print first 100 characters.
 #   -c|--color                       Colorize the output (green - free GPU, yellow -
 #                                    moderately used GPU, red - fully used GPU)
+#   -u|--user USERS                  Limit the list of processes to selected users
+#                                    (comma-separated)
 #   -i|--id ID                       Limit the command to selected GPU IDs (comma-separated)
 ######
 
