@@ -303,3 +303,30 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 
 # Dotfiles management
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+# SLURM
+# SINFO aliases
+# Detailed sinfo
+alias si="sinfo -o '%8P %10n %.11T %.4c %.8z %.6m %22G %10l %10L %10O %20E' -S '-P'"
+
+# SQUEUE aliases
+# Detailed squeue
+alias sq="squeue -Su -o '%8i %10u %20j %4t %5D %20R %15b %3C %7m %11l %11L'"
+# squeue only on GPU partition
+alias sqg="sq -p gpu"
+# squeue only on CPU partition
+alias sqc="sq -p cpu"
+# squeue only your jobs
+alias squ="sq -u `id -un`"
+alias sqa='squeue -Su -o '\''%6i %8u %10j %3t %5P %19S %11l %11L %1D %3C %7m %30b %50R'\'''
+
+# SSTAT alias to get information about your RUNNING jobs
+# Usage: sst <jobid>
+#     OR sst <jobid>.batch (if you use SBATCH and do not use SRUN inside)
+alias sst='sstat --format=JobID,NTasks,AveCPU,AveCPUFreq,AveRSS,MaxRSS -j'
+
+# STATUS
+alias sstatus='sinfo -N -o "%20N %12P %10t %20G"'
+alias sgpu='scontrol show nodes | awk '\''BEGIN { printf "%-15s %-35s %-22s %5s %5s %5s\n", "NODE", "STATE", "GPU_TYPE", "TOTAL", "USED", "FREE" } /NodeName=/ { split($1,a,"="); node=a[2] } /State=/ { split($1,a,"="); state=a[2] } /Gres=/ { match($0,/gpu:([^:]+):([0-9]+)/,g); type=g[1] } /CfgTRES=/ { match($0,/gres\/gpu=([0-9]+)/,c); cfg=c[1] } /AllocTRES=/ { used=0; if (match($0,/gres\/gpu=([0-9]+)/,a)) used=a[1]; printf "%-15s %-35s %-22s %5d %5d %5d\n", node, state, type, cfg, used, cfg-used }'\'''
+alias snodes='scontrol show nodes'
+
