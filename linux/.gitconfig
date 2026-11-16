@@ -33,3 +33,7 @@
 	clean = "sed '/# gitignore$/'d"
 [filter "gitignore"]
 	smudge = cat
+
+# Settings for this machine only, not tracked (for example credential.helper)
+[include]
+	path = ~/.gitconfig.local

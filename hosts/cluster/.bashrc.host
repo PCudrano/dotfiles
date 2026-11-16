@@ -1,7 +1,7 @@
 # Cluster-only settings, sourced at the end of ~/.bashrc
 
 # Huggingface
-export HF_HOME="${SCRATCH}/.cache/huggingface"
+export HF_HOME="${SCRATCH:-$HOME}/.cache/huggingface"
 
 # SLURM
 # SINFO aliases

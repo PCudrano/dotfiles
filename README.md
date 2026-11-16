@@ -63,7 +63,7 @@ edit in the repo.
 | Every machine | `common/` |
 | All Linux machines | `linux/.bashrc`, `linux/.bash_aliases`, ... |
 | One machine, tracked | `hosts/<profile>/.bashrc.host` (sourced at the end of `~/.bashrc`) |
-| One machine, not tracked (secrets, experiments) | `~/.bashrc.local` (sourced last) |
+| One machine, not tracked (secrets, experiments) | `~/.bashrc.local` (sourced last); for git, `~/.gitconfig.local` |
 | The Mac | `hosts/macos/.zshrc`, `hosts/macos/.aliases` |
 
 ## Add a machine

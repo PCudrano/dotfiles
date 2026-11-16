@@ -46,9 +46,9 @@ export HISTSIZE=1000000
 # added by Miniconda3 installer
 export PATH="$HOME/miniconda3/bin:$PATH"
 
-# Custom function for magrathea GPUs
-if [[ -f ~/.magrathea_fcn ]]; then
-    source ~/.magrathea_fcn
+# GPU helper functions of the server we are on (magrathea, elysium, westworld)
+if [[ -f ~/.$(hostname -s)_fcn ]]; then
+    source ~/.$(hostname -s)_fcn
 fi
 
 # Huggingface
