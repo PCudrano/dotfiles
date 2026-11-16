@@ -1,0 +1,50 @@
+#!/bin/bash
+
+get-cpu(){
+    local gpu=$1
+    local cpu
+    case $gpu in
+        0)
+            cpu='48-55'
+            ;;
+        1)
+            cpu='56-63'
+            ;;
+        2)
+            cpu='64-71'
+            ;;
+        3)
+            cpu='72-79'
+            ;;
+        4)
+            cpu='80-87'
+            ;;
+        5)
+            cpu='88-95'
+            ;;
+        6)
+            cpu='96-103'
+            ;;
+        7)
+            cpu='103-111'
+            ;;
+	*)
+	    echo "get-cpu: Error! GPU $gpu not existing"
+	    return 1
+    esac
+    echo $cpu
+    return 0
+}
+
+docker-gpu-args(){
+    gpu=$1
+    cpu=$(get-cpu $gpu)
+    retVal=$?
+    if [ $retVal -ne 0 ]; then
+        echo "docker-gpu-args: Error! GPU $gpu not existing"
+        return $retVal	
+    fi
+    echo $gpu $cpu
+    return 0
+}
+

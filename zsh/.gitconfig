@@ -1,0 +1,11 @@
+[core]
+	editor = vim
+[pull]
+	rebase = false
+[user]
+	name = Paolo Cudrano
+	email = paolo.cudrano@polimi.it
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
+[init]
+	defaultBranch = main

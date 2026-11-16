@@ -1,0 +1,9 @@
+[submodule "bash/.tmux/plugins/tpm"]
+	path = bash/.tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
+[submodule "zsh/.zprezto"]
+	path = zsh/.zprezto
+	url = https://github.com/sorin-ionescu/prezto.git
+[submodule "zsh/.zprezto-contrib/zsh-watch"]
+	path = zsh/.zprezto-contrib/zsh-watch
+	url = https://github.com/Thearas/zsh-watch
