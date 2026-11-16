@@ -4,9 +4,9 @@ if [[ -f ~/.profile ]]; then
 fi
 
 # If .bashrc exists, get the aliases and functions
-if [[ -f ~/.bashrc ]]; then
-  . ~/.bashrc
-fi
+#if [[ -f ~/.bashrc ]]; then
+#  . ~/.bashrc
+#fi
 
 # if [ -f ~/.git-completion.bash ]; then
 #     . ~/.git-completion.bash

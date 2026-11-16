@@ -9,8 +9,8 @@ cd "$repo"
 
 profile=${1:-$(git config dotfiles.profile || true)}
 case $profile in
-  macos)          dirs=(hosts/macos) ;;
-  cluster|airlab) dirs=(linux "hosts/$profile") ;;
+  macos)          dirs=(common hosts/macos) ;;
+  cluster|airlab) dirs=(common linux "hosts/$profile") ;;
   *) echo "usage: $0 cluster|airlab|macos" >&2; exit 1 ;;
 esac
 git config dotfiles.profile "$profile"
@@ -27,13 +27,14 @@ git config -f .gitmodules --get-regexp '\.path$' | while read -r _ path; do
   done
 done
 
-# Symlink every tracked file into $HOME. A file in hosts/<profile>/ wins over
-# the same path in linux/. Existing real files are moved to a backup folder.
+# Symlink every tracked file into $HOME. For the same path, hosts/<profile>/
+# wins over linux/, which wins over common/. Existing real files are moved to a backup folder.
 backup=$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)
 for d in "${dirs[@]}"; do
   git ls-files -- "$d" | while read -r f; do
     rel=${f#"$d"/}
-    [[ $d == linux && -e hosts/$profile/$rel ]] && continue
+    [[ $d != hosts/* && -e hosts/$profile/$rel ]] && continue
+    [[ $d == common && $profile != macos && -e linux/$rel ]] && continue
     dst=$HOME/$rel
     if [[ -L $dst ]]; then
       rm "$dst"

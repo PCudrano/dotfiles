@@ -5,20 +5,21 @@ shared files and its own folder, and `install.sh` symlinks them into `$HOME`.
 
 ```
 install.sh        links one profile into $HOME
-linux/            shared by the Linux bash machines (bash, git, vim, tmux, inputrc)
+common/           shared by every machine (vim)
+linux/            shared by the Linux bash machines (bash, git, tmux, inputrc)
 hosts/cluster/    SLURM cluster: .bashrc.host
 hosts/airlab/     AIRLab servers: .bashrc.host, GPU helpers, tmux and terminal theme
-hosts/macos/      Mac: zsh with prezto, vim, git
+hosts/macos/      Mac: zsh with prezto, git
 ```
 
 | Profile | Folders on disk |
 |---|---|
-| `cluster` | `linux/`, `hosts/cluster/` |
-| `airlab` | `linux/`, `hosts/airlab/` |
-| `macos` | `hosts/macos/` |
+| `cluster` | `common/`, `linux/`, `hosts/cluster/` |
+| `airlab` | `common/`, `linux/`, `hosts/airlab/` |
+| `macos` | `common/`, `hosts/macos/` |
 
-Every folder mirrors `$HOME`: `linux/.bashrc` becomes `~/.bashrc`. A file in
-`hosts/<profile>/` replaces the file with the same path in `linux/`.
+Every folder mirrors `$HOME`: `linux/.bashrc` becomes `~/.bashrc`. For the same
+path, `hosts/<profile>/` wins over `linux/`, which wins over `common/`.
 
 ## Set up a new machine
 
@@ -52,13 +53,14 @@ edit in the repo.
 - Get updates: `git -C ~/dotfiles pull`, then `~/dotfiles/install.sh` (no argument;
   it remembers the profile) if files were added.
 - Send changes back: `git commit` and `git push` in `~/dotfiles`.
-- Track a new file: move it to the matching path under `linux/` or `hosts/<profile>/`,
+- Track a new file: move it to the matching path under `common/`, `linux/` or `hosts/<profile>/`,
   run `~/dotfiles/install.sh`, commit.
 
 ## Where a setting goes
 
 | Setting applies to | Put it in |
 |---|---|
+| Every machine | `common/` |
 | All Linux machines | `linux/.bashrc`, `linux/.bash_aliases`, ... |
 | One machine, tracked | `hosts/<profile>/.bashrc.host` (sourced at the end of `~/.bashrc`) |
 | One machine, not tracked (secrets, experiments) | `~/.bashrc.local` (sourced last) |

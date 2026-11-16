@@ -262,6 +262,8 @@ export DEBUGPY_PROCESS_SPAWN_TIMEOUT=500
 # Avoid escape of $ in tab completion
 shopt -s direxpand
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # Settings for this machine only (tracked, from hosts/<profile>/ in the dotfiles repo)
 if [ -f ~/.bashrc.host ]; then
     . ~/.bashrc.host

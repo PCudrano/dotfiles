@@ -112,6 +112,50 @@ CVD6(){ export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:+${CUDA_VISIBLE_DEVIC
 CVD7(){ export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:+${CUDA_VISIBLE_DEVICES},}7; }
 CVDNONE(){ export CUDA_VISIBLE_DEVICES=-1; }
 
+# WATCH ALIASES (https://gist.github.com/ablacklama/550420c597f9599cf804d57dd6aad131)
+swatch_usage() {
+    cat <<EOF >&2
+NAME
+       swatch - execute a program periodically with "watch". Supports aliases.
+
+SYNOPSIS
+       swatch [options] command
+
+OPTIONS
+       -n, --interval seconds (default: 1)
+              Specify update interval.  The command will not allow quicker than
+              0.1 second interval.
+EOF
+}
+
+swatch() {
+    if [ $# -eq 0 ]; then
+        swatch_usage
+        return 1
+    fi
+    seconds=1
+
+    case "$1" in
+    -n)
+        seconds="$2"
+        args=${*:3}
+        ;;
+    -h)
+        swatch_usage
+        return 1
+        ;;
+    *)
+        seconds=1
+        args=${*:1}
+        ;;
+
+    esac
+
+    watch --color -n "$seconds" --exec bash -ic "$args || true"
+}
+
+
+
 # Displays
 D0(){ export DISPLAY=localhost:0.0; }
 D10(){ export DISPLAY=localhost:10.0; }
@@ -300,4 +344,3 @@ alias gupav='git pull --rebase --autostash -v'
 alias gupv='git pull --rebase -v'
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
-

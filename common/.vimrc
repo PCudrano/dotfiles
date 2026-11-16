@@ -22,15 +22,10 @@ set showcmd
 
 " * Text Formatting -- General
 
-" use indents of 2 spaces, and have them copied down lines:
-"set shiftwidth=2
-"set shiftround
-"set expandtab
-"set autoindent
-
+" indent with 4 spaces, never real tabs:
 set tabstop=4                   " a tab is four spaces
 set softtabstop=4               " when hitting <BS>, pretend like a tab is removed, even if spaces
-set noexpandtab                 " don't expand tabs to spaces by default
+set expandtab                   " insert spaces instead of tabs
 set shiftwidth=4                " number of spaces to use for autoindenting
 set shiftround                  " use multiple of shiftwidth when indenting with '<' and '>'
 set backspace=indent,eol,start  " allow backspacing over everything in insert mode
@@ -46,7 +41,7 @@ set scrolloff=4                 " keep 4 lines off the edges of the screen when 
 set wrap
 
 " display line numbers:
-set number
+set nonumber
 
 set formatoptions-=t
 set textwidth=99
