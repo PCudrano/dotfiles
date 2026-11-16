@@ -1,0 +1,5 @@
+# Leonardo Cluster 2FA
+alias leonardo-login='step ssh login paolo.cudrano@polimi.it --provisioner cineca-hpc && ssh leonardo'
+
+alias glacomp="git log --graph --decorate --oneline --simplify-by-decoration --all"
+

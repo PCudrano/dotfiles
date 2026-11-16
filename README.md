@@ -1,63 +1,81 @@
 # dotfiles
 
-My dotfiles collections across different environments.
-
-Sets up a bare repo under ~/.dotfiles directory, which can be managed using a `dotfiles` command instead of `git`. Quick and practical way to not have your home folder under git, but still have it ;-)<br>
-I use a different branch for different machine configurations. The `main` branch only contains this README.
-
-Credits for this setup to: https://www.atlassian.com/git/tutorials/dotfiles
-
-## Quick guide
-
-### Clone a setup on a new machine
+My dotfiles for all machines, on one branch. Each machine checks out only the
+shared files and its own folder, and `install.sh` symlinks them into `$HOME`.
 
 ```
-git clone --bare <git-repo-url> $HOME/.dotfiles --branch <branch-name>
-function dotfiles {
-   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
-}
-# attempt to set up dotfiles
-dotfiles checkout
-if [ $? = 0 ]; then # if is overwriting some files
-  echo "Checked out config.";
-else
-  # make backup of current dotfiles
-  echo "Backing up pre-existing dot files.";
-  mkdir -p .dotfiles-backup;
-  dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .dotfiles-backup/{};
-  dotfiles checkout
-fi;
-dotfiles config status.showUntrackedFiles no
+install.sh        links one profile into $HOME
+linux/            shared by the Linux bash machines (bash, git, vim, tmux, inputrc)
+hosts/cluster/    SLURM cluster: .bashrc.host
+hosts/airlab/     AIRLab servers: .bashrc.host, GPU helpers, tmux and terminal theme
+hosts/macos/      Mac: zsh with prezto, vim, git
 ```
 
-### Add a new setup
+| Profile | Folders on disk |
+|---|---|
+| `cluster` | `linux/`, `hosts/cluster/` |
+| `airlab` | `linux/`, `hosts/airlab/` |
+| `macos` | `hosts/macos/` |
 
-First, make sure this repo is present on the machine: (If this dotfiles management is already used on the machine, you can skip this part)
+Every folder mirrors `$HOME`: `linux/.bashrc` becomes `~/.bashrc`. A file in
+`hosts/<profile>/` replaces the file with the same path in `linux/`.
+
+## Set up a new machine
 
 ```
-git clone --bare <git-repo-url> $HOME/.dotfiles
-function dotfiles {
-   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
-}
-dotfiles config status.showUntrackedFiles no
-```
-
-Create a branch for the new setup:
-```
-dotfiles checkout -b <branch-name>
-```
-
-Enable difference tracking:
-```
-dotfiles config --unset status.showUntrackedFiles
+git clone --filter=blob:none --sparse git@github.com:PCudrano/dotfiles.git ~/dotfiles
+~/dotfiles/install.sh <profile>
 ```
 
-Add any file you modified with:
-```
-dotfiles add <filepaths>
-```
+`install.sh` does four things:
 
-Push the branch and changes:
-```
-dotfiles push --set-upstream origin <branch-name>
-```
+1. Restricts the checkout to the profile's folders (git sparse checkout, git 2.25 or
+   newer). With an older git it prints a warning and keeps the full checkout.
+2. Fetches the submodules of that profile (tpm, prezto, zsh-watch).
+3. Symlinks each tracked file into `$HOME`. A file that already exists is moved to
+   `~/.dotfiles-backup/<timestamp>/` first.
+4. Sets up the Claude config, which lives in its own repo:
+   `git clone git@github.com:PCudrano/claude-config.git ~/claude-config` and
+   `~/claude-config/install.sh`. It skips this when `~/.claude/CLAUDE.md` is already
+   a symlink, or when run as `NO_CLAUDE=1 ~/dotfiles/install.sh <profile>`.
+
+On the Linux profiles, open tmux and press `<prefix> + I` to install the tmux plugins.
+
+A machine that only needs to pull can clone over HTTPS instead; the repo URL is the
+only difference.
+
+## Daily use
+
+The files in `$HOME` are symlinks into `~/dotfiles`, so an edit to `~/.bashrc` is an
+edit in the repo.
+
+- Get updates: `git -C ~/dotfiles pull`, then `~/dotfiles/install.sh` (no argument;
+  it remembers the profile) if files were added.
+- Send changes back: `git commit` and `git push` in `~/dotfiles`.
+- Track a new file: move it to the matching path under `linux/` or `hosts/<profile>/`,
+  run `~/dotfiles/install.sh`, commit.
+
+## Where a setting goes
+
+| Setting applies to | Put it in |
+|---|---|
+| All Linux machines | `linux/.bashrc`, `linux/.bash_aliases`, ... |
+| One machine, tracked | `hosts/<profile>/.bashrc.host` (sourced at the end of `~/.bashrc`) |
+| One machine, not tracked (secrets, experiments) | `~/.bashrc.local` (sourced last) |
+| The Mac | `hosts/macos/.zshrc`, `hosts/macos/.aliases` |
+
+## Add a machine
+
+1. Create `hosts/<name>/` with at least a `.bashrc.host`.
+2. Add `<name>` to the `case` in `install.sh`.
+3. Commit, then run the two setup commands on that machine.
+
+## Old layout
+
+Until 2026 this repo was a bare repo at `~/.dotfiles` with one branch per machine
+(`bash_ubuntu`, `bash_ubuntu_airlab`, `bash_ubuntu_cluster`, `ubuntu-mila`,
+`zsh_macos`, `zsh_macos_old`). Those branches are kept unchanged for reference.
+
+To move a machine from the old layout: run the two setup commands above. The old
+files in `$HOME` are moved to `~/.dotfiles-backup/`, and `~/.dotfiles` can be deleted
+once the new setup works.
