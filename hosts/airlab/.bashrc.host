@@ -52,7 +52,7 @@ if [[ -f ~/.$(hostname -s)_fcn ]]; then
 fi
 
 # Huggingface
-export HF_HOME="/multiverse/storage/cudrano/.cache/huggingface"
+export HF_HOME="/multiverse/storage/$USER/.cache/huggingface"
 
 # Autocomplete ssh names in bash (defined in .ssh/config)
 _complete_ssh_hosts () {

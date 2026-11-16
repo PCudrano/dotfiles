@@ -63,8 +63,9 @@ done
 
 if [[ -n $copy ]]; then
   git config --file "$HOME/.gitconfig" --remove-section user 2>/dev/null || true
-  echo "dotfiles: copied profile '$profile' into $HOME; you can delete $repo"
-  echo "set your own git identity: git config --global user.name '...'; git config --global user.email '...'"
+  echo "dotfiles: copied profile '$profile' into $HOME"
+  echo "now delete the clone:      rm -rf $repo"
+  echo "set your git identity:     git config --global user.name '...'; git config --global user.email '...'"
   exit
 fi
 echo "dotfiles: linked profile '$profile' into $HOME"
