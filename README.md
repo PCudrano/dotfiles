@@ -45,6 +45,25 @@ On the bash profiles, open tmux and press `<prefix> + I` to install the tmux plu
 A machine that only needs to pull can clone over HTTPS instead; the repo URL is the
 only difference.
 
+## Just want a copy? (students, one-off setups)
+
+If you only want these settings and do not plan to sync with this repo, copy the
+files instead of linking them and delete the clone:
+
+```
+git clone --filter=blob:none --sparse https://github.com/PCudrano/dotfiles.git /tmp/dotfiles
+/tmp/dotfiles/install.sh --copy <profile>
+rm -rf /tmp/dotfiles
+```
+
+- `<profile>` is `cluster` or `airlab` for bash on Linux, `macos` for zsh on a Mac.
+- Your existing files are moved to `~/.dotfiles-backup/<timestamp>/`, so you can go back.
+- The copied `.gitconfig` has my name and email removed. Set yours with
+  `git config --global user.name "..."` and `git config --global user.email "..."`.
+- The files are plain files in your home folder afterwards; edit them freely.
+- Some lines are specific to my accounts (for example `HF_HOME` in `~/.bashrc.host`,
+  paths in `~/.zshrc`). Read through the files once and adjust them.
+
 ## Daily use
 
 The files in `$HOME` are symlinks into `~/dotfiles`, so an edit to `~/.bashrc` is an
