@@ -6,20 +6,20 @@ shared files and its own folder, and `install.sh` symlinks them into `$HOME`.
 ```
 install.sh        links one profile into $HOME
 common/           shared by every machine (vim)
-linux/            shared by the Linux bash machines (bash, git, tmux, inputrc)
-hosts/cluster/    SLURM cluster: .bashrc.host
-hosts/airlab/     AIRLab servers: .bashrc.host, GPU helpers, tmux and terminal theme
-hosts/macos/      Mac: zsh with prezto, git
+bash/             shared by the machines that use bash (bash, git, tmux, inputrc)
+zsh/              the zsh setup with prezto, used on the Mac
+hosts/cluster/    additions for the SLURM cluster: .bashrc.host
+hosts/airlab/     additions for the AIRLab servers: .bashrc.host, GPU helpers, tmux, terminal theme
 ```
 
 | Profile | Folders on disk |
 |---|---|
-| `cluster` | `common/`, `linux/`, `hosts/cluster/` |
-| `airlab` | `common/`, `linux/`, `hosts/airlab/` |
-| `macos` | `common/`, `hosts/macos/` |
+| `cluster` | `common/`, `bash/`, `hosts/cluster/` |
+| `airlab` | `common/`, `bash/`, `hosts/airlab/` |
+| `macos` | `common/`, `zsh/` |
 
-Every folder mirrors `$HOME`: `linux/.bashrc` becomes `~/.bashrc`. For the same
-path, `hosts/<profile>/` wins over `linux/`, which wins over `common/`.
+Every folder mirrors `$HOME`: `bash/.bashrc` becomes `~/.bashrc`. For the same
+path, `hosts/<profile>/` wins over `bash/`, which wins over `common/`.
 
 ## Set up a new machine
 
@@ -40,7 +40,7 @@ git clone --filter=blob:none --sparse git@github.com:PCudrano/dotfiles.git ~/dot
    `~/claude-config/install.sh`. It skips this when `~/.claude/CLAUDE.md` is already
    a symlink, or when run as `NO_CLAUDE=1 ~/dotfiles/install.sh <profile>`.
 
-On the Linux profiles, open tmux and press `<prefix> + I` to install the tmux plugins.
+On the bash profiles, open tmux and press `<prefix> + I` to install the tmux plugins.
 
 A machine that only needs to pull can clone over HTTPS instead; the repo URL is the
 only difference.
@@ -53,7 +53,7 @@ edit in the repo.
 - Get updates: `git -C ~/dotfiles pull`, then `~/dotfiles/install.sh` (no argument;
   it remembers the profile) if files were added.
 - Send changes back: `git commit` and `git push` in `~/dotfiles`.
-- Track a new file: move it to the matching path under `common/`, `linux/` or `hosts/<profile>/`,
+- Track a new file: move it to the matching path under `common/`, `bash/`, `zsh/` or `hosts/<profile>/`,
   run `~/dotfiles/install.sh`, commit.
 
 ## Where a setting goes
@@ -61,10 +61,10 @@ edit in the repo.
 | Setting applies to | Put it in |
 |---|---|
 | Every machine | `common/` |
-| All Linux machines | `linux/.bashrc`, `linux/.bash_aliases`, ... |
+| All bash machines | `bash/.bashrc`, `bash/.bash_aliases`, ... |
 | One machine, tracked | `hosts/<profile>/.bashrc.host` (sourced at the end of `~/.bashrc`) |
 | One machine, not tracked (secrets, experiments) | `~/.bashrc.local` (sourced last); for git, `~/.gitconfig.local` |
-| The Mac | `hosts/macos/.zshrc`, `hosts/macos/.aliases` |
+| The Mac | `zsh/.zshrc`, `zsh/.aliases` |
 
 ## Add a machine
 

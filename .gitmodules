@@ -1,9 +1,9 @@
-[submodule "linux/.tmux/plugins/tpm"]
-	path = linux/.tmux/plugins/tpm
+[submodule "bash/.tmux/plugins/tpm"]
+	path = bash/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "hosts/macos/.zprezto"]
-	path = hosts/macos/.zprezto
+[submodule "zsh/.zprezto"]
+	path = zsh/.zprezto
 	url = git@github.com:sorin-ionescu/prezto.git
-[submodule "hosts/macos/.zprezto-contrib/zsh-watch"]
-	path = hosts/macos/.zprezto-contrib/zsh-watch
+[submodule "zsh/.zprezto-contrib/zsh-watch"]
+	path = zsh/.zprezto-contrib/zsh-watch
 	url = https://github.com/Thearas/zsh-watch
