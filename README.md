@@ -24,9 +24,9 @@ the later folder of the profile wins. Files already in `$HOME` are moved to
 ## Copy (one-off, no repo kept)
 
 ```
-git clone --filter=blob:none --sparse https://github.com/PCudrano/dotfiles.git /tmp/dotfiles
-/tmp/dotfiles/install.sh --copy <profile>
-rm -rf /tmp/dotfiles
+git clone --filter=blob:none --sparse https://github.com/PCudrano/dotfiles.git ~/dotfiles
+~/dotfiles/install.sh --copy <profile>
+rm -rf ~/dotfiles
 ```
 
 The files are plain copies: customize whatever you need. The git identity is removed
